@@ -161,8 +161,8 @@ export const operationsCase = {
     'and the decisions underneath it.',
   facts: [
     { label: 'Role', value: 'Sole developer — domain model to deploys' },
-    { label: 'Running since', value: '[year], in daily production use' },
-    { label: 'Users', value: '[n] internal roles + customer portal' },
+    { label: 'Running since', value: 'Early 2026, in daily production use' },
+    { label: 'Users', value: 'Dozens of people daily, plus a customer portal' },
     { label: 'Stack', value: 'React · TypeScript · Postgres · Supabase' },
   ],
   problem: [
