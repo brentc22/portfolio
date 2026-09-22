@@ -19,6 +19,12 @@ export default {
         'venue à couvrir la vente, le planning, l’exécution sur chantier, la logistique, la ' +
         'comptabilité et un portail client — et les décisions qui la soutiennent.',
     },
+    projectPoint: {
+      title: 'Project-Point — Brent Ceulemans',
+      description:
+        'Relevé de chantier et suivi de projet pour le bâtiment : points, photos, planning et ' +
+        'un portail client. Mon propre produit, et les décisions derrière.',
+    },
     notFound: {
       title: 'Page introuvable — Brent Ceulemans',
       description: 'Cette page n’existe pas.',
@@ -63,6 +69,8 @@ export default {
       scope: { eyebrow: 'Périmètre', title: 'Cinq couches, une base de données', aside: 'chaque couche a sa couleur' },
       engineering: { eyebrow: 'Technique', title: 'Les décisions qui comptaient', aside: 'et ce que coûte l’alternative' },
       process: { eyebrow: 'Déroulement', title: 'Comment le travail se passe' },
+      whatItDoes: { eyebrow: 'Produit', title: 'Ce qu’il fait', aside: 'quatre choses, pas quarante' },
+      built: { eyebrow: 'Construction', title: 'Comment c’est construit' },
       whyNot: 'Pourquoi pas l’inverse',
       ndaLabel: 'Sous NDA',
       next: 'Suivant',
@@ -178,7 +186,146 @@ export default {
     },
   ],
 
-  case: {
+  projectPointCase: {
+    eyebrow: 'Cas 01 · Produit maison',
+    title: 'Une liste de points qui survit au chantier',
+    standfirst:
+      'Project-Point est mon propre produit : relevé de chantier et suivi de projet pour le ' +
+      'bâtiment. Points, photos et planning au même endroit, et un portail où le client suit ' +
+      'l’avancement sans entrer dans votre administration.',
+    facts: [
+      { label: 'Rôle', value: 'Produit maison — conception, développement, exploitation' },
+      { label: 'En ligne sur', value: 'project-point.be' },
+      { label: 'Construit avec', value: 'JavaScript pur · esbuild · Supabase · Cloudflare' },
+      { label: 'Forme', value: 'Application de chantier, portail client et site vitrine' },
+    ],
+    problem: [
+      'Une liste de points de chantier vit à trois endroits à la fois : des photos dans une ' +
+        'discussion de groupe, des notes au dos d’un bon de livraison, et un appel téléphonique ' +
+        'qui n’a jamais été noté. Tout le monde a une version, personne n’a la version.',
+      'La facture arrive à la réception des travaux. Quelque chose a été convenu en mars, la ' +
+        'photo qui le prouve est quelque part dans un fil de quatre cents images, et la ' +
+        'discussion ne porte plus sur le travail — elle porte sur qui se souvient de quoi.',
+      'Le produit n’est donc pas un outil de gestion de projet auquel on a ajouté des photos. ' +
+        'C’est un point : une photo, une annotation sur cette photo, une action, un responsable ' +
+        'et un statut — saisis debout devant, sur un téléphone, avec des gants.',
+    ],
+    features: [
+      {
+        title: 'Chantiers et points',
+        body:
+          'Par chantier, ce qui reste à faire. Chaque point porte une action — relance, ' +
+          'information manquante, travail en régie, prix à confirmer — et un statut lisible ' +
+          'd’un coup d’œil.',
+      },
+      {
+        title: 'Des photos sur lesquelles on dessine',
+        body:
+          'Prenez la photo sur place et annotez-la immédiatement : flèche, cercle, surlignage. ' +
+          'La note reste attachée au point, avec le nom de celui qui l’a écrite.',
+      },
+      {
+        title: 'Planning et Gantt',
+        body:
+          'Les travaux étalés dans le temps, et tous les chantiers côte à côte dans une seule ' +
+          'vue Gantt — par semaine, par mois ou par trimestre.',
+      },
+      {
+        title: 'Portail client',
+        body:
+          'Un lien par client, par chantier. Vous décidez point par point ce qu’il voit, et il ' +
+          'peut répondre et ajouter ses propres photos.',
+      },
+    ],
+    decisions: [
+      {
+        title: 'Le client entre sans compte',
+        body:
+          'L’accès au portail passe par une adresse e-mail et un code PIN. Pas d’inscription, ' +
+          'pas de mot de passe à oublier, pas de compte à gérer de part et d’autre.',
+        why:
+          'Un client ouvre ceci deux fois par an. Un formulaire d’inscription est exactement ' +
+          'l’endroit où cette personne abandonne, et un portail que personne n’ouvre vaut moins ' +
+          'qu’un e-mail. Le coût est réel : sans fournisseur d’identité, vous portez ' +
+          'vous-même l’expiration du lien, la limitation de débit et la portée de la session — ' +
+          'et on ne réussit cela qu’en le testant comme le mauvais destinataire.',
+      },
+      {
+        title: 'La visibilité se décide par point, pas par chantier',
+        body:
+          'L’entrepreneur marque chaque point comme visible ou interne. Les prix encore en ' +
+          'discussion, les remarques sur un sous-traitant et la note sur un litige restent à ' +
+          'l’intérieur.',
+        why:
+          'Un seul interrupteur par chantier impose un choix entre cacher tout ce qui est utile ' +
+          'et montrer la discussion sur les travaux supplémentaires. Le faire par point demande ' +
+          'plus de travail, et c’est la seule granularité qui corresponde à la façon dont les ' +
+          'gens parlent réellement d’un chantier.',
+      },
+      {
+        title: 'L’annotation se fait au point, pas de retour au bureau',
+        body:
+          'La flèche est tracée sur le téléphone, debout devant la chose. La photo est ' +
+          'enregistrée avec l’annotation, pas à côté d’une description de celle-ci.',
+        why:
+          'Une photo sans annotation est une discussion. Celui qui était là sait de quelle ' +
+          'fissure il s’agit ; trois semaines plus tard, plus personne ne le sait, lui compris. ' +
+          'Le faire plus tard coûte moins cher à construire, et c’est précisément la ' +
+          'fonctionnalité qui finit par ne jamais servir.',
+      },
+      {
+        title: 'Le planning traverse les chantiers, il ne reste pas dans un seul',
+        body:
+          'La vue Gantt place tous les chantiers en cours sur la même ligne de temps au lieu de ' +
+          'donner à chacun son propre diagramme.',
+        why:
+          'Planifier un chantier n’est pas difficile — l’entrepreneur l’a déjà en tête. La ' +
+          'question qui coûte de l’argent, c’est quelle équipe se trouve où mardi prochain, et ' +
+          'cette question reste invisible tant que les chantiers ne sont pas dessinés côte à côte.',
+      },
+    ],
+    process: [
+      {
+        step: '01',
+        title: 'Pas de framework',
+        body:
+          'Du JavaScript pur, empaqueté avec esbuild. Cette application s’ouvre sur un ' +
+          'téléphone, sur un toit, avec une mauvaise connexion : chaque kilo-octet est une ' +
+          'seconde d’attente pour quelqu’un.',
+      },
+      {
+        step: '02',
+        title: 'La base de données fait le travail',
+        body:
+          'Environ 180 Ko de PL/pgSQL dans Postgres : les règles d’accès, les transitions de ' +
+          'statut et ce que le portail voit d’un chantier s’y décident, pas dans le client.',
+      },
+      {
+        step: '03',
+        title: 'Push plutôt que scrutation',
+        body:
+          'Web push, pour qu’un nouveau point atteigne la personne qui doit agir sans que ' +
+          'personne ait à garder un onglet ouvert.',
+      },
+      {
+        step: '04',
+        title: 'Cloudflare de bout en bout',
+        body:
+          'Le site vitrine, l’application et le portail sont servis depuis l’edge, ce qui garde ' +
+          'le premier affichage rapide sur une connexion de chantier et le coût fixe proche de zéro.',
+      },
+    ],
+    live: {
+      label: 'Voir le produit',
+      body:
+        'Project-Point est un produit en service, pas une démo. Le site vitrine l’explique en ' +
+        'néerlandais ; l’application elle-même est derrière un login, parce qu’elle contient de ' +
+        'vrais chantiers.',
+      cta: 'project-point.be',
+    },
+  },
+
+  operationsCase: {
     eyebrow: 'Cas 02 · Sous NDA',
     title: 'Le système dans lequel une entreprise passe sa journée',
     standfirst:

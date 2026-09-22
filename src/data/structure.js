@@ -28,8 +28,9 @@ export const projectMeta = [
     id: 'project-point',
     number: '01',
     layer: 'leads',
-    href: 'https://project-point.be',
-    external: true,
+    href: '/work/project-point/',
+    external: false,
+    live: 'https://project-point.be',
     badgeSolid: true,
     tags: ['Product', 'Portal', 'Cloudflare'],
     preview: 'points',
@@ -75,8 +76,18 @@ export const principleMeta = [
   { layer: 'leads', number: '04' },
 ]
 
-/** Same, for the four decisions on the case page. */
-export const decisionLayers = ['quotes', 'portal', 'invoices', 'site']
+/** Per case: which layer colour each of the four decisions is drawn in, and
+ *  which case the reader is sent to next. */
+export const caseMeta = {
+  'project-point': {
+    decisionLayers: ['portal', 'site', 'quotes', 'invoices'],
+    next: 'operations-platform',
+  },
+  'operations-platform': {
+    decisionLayers: ['quotes', 'portal', 'invoices', 'site'],
+    next: 'catchbox',
+  },
+}
 
 /** The quote drawn in the hero. Belgian format, 6% renovation VAT, and the
  *  arithmetic actually adds up — a fake total is the kind of detail a client

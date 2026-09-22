@@ -19,6 +19,12 @@ export default {
         'op de werf, logistiek, boekhouding en een klantenportaal ging dekken voor een ' +
         'installatiebedrijf — en de keuzes die eronder liggen.',
     },
+    projectPoint: {
+      title: 'Project-Point — Brent Ceulemans',
+      description:
+        'Werfregistratie en projectbeheer voor de bouw: punten, foto’s, planning en een ' +
+        'klantenportaal. Mijn eigen product, en de keuzes erachter.',
+    },
     notFound: {
       title: 'Pagina niet gevonden — Brent Ceulemans',
       description: 'Die pagina bestaat niet.',
@@ -63,6 +69,8 @@ export default {
       scope: { eyebrow: 'Omvang', title: 'Vijf lagen, één database', aside: 'elke laag heeft zijn kleur' },
       engineering: { eyebrow: 'Techniek', title: 'Keuzes die telden', aside: 'en wat het alternatief kost' },
       process: { eyebrow: 'Werkwijze', title: 'Hoe het werk verloopt' },
+      whatItDoes: { eyebrow: 'Product', title: 'Wat het doet', aside: 'vier dingen, geen veertig' },
+      built: { eyebrow: 'Bouw', title: 'Hoe het gebouwd is' },
       whyNot: 'Waarom niet andersom',
       ndaLabel: 'Onder NDA',
       next: 'Volgende',
@@ -177,7 +185,140 @@ export default {
     },
   ],
 
-  case: {
+  projectPointCase: {
+    eyebrow: 'Case 01 · Eigen product',
+    title: 'Een puntenlijst die de werf overleeft',
+    standfirst:
+      'Project-Point is mijn eigen product: werfregistratie en projectbeheer voor de bouw. ' +
+      'Punten, foto’s en planning op één plek, en een portaal waar de klant meevolgt zonder ' +
+      'in je administratie te zitten.',
+    facts: [
+      { label: 'Rol', value: 'Eigen product — ontwerp, bouw, uitbating' },
+      { label: 'Live op', value: 'project-point.be' },
+      { label: 'Gebouwd met', value: 'Pure JavaScript · esbuild · Supabase · Cloudflare' },
+      { label: 'Vorm', value: 'Werf-app, klantenportaal en marketingsite' },
+    ],
+    problem: [
+      'Een puntenlijst op een werf zit op drie plaatsen tegelijk: foto’s in een groepschat, ' +
+        'notities op de achterkant van een leveringsbon, en één telefoontje dat nooit ergens ' +
+        'terechtkwam. Iedereen heeft een versie, niemand heeft dé versie.',
+      'De rekening komt bij de oplevering. Er is iets afgesproken in maart, de foto die dat ' +
+        'bewijst zit ergens in een gesprek met vierhonderd andere beelden, en de discussie gaat ' +
+        'niet meer over het werk — ze gaat over wie zich wat herinnert.',
+      'Het product is dus geen projectbeheertool met foto’s erbij. Het is een punt: een foto, ' +
+        'een markering op die foto, een actie, een eigenaar en een status — vastgelegd terwijl ' +
+        'je ervoor staat, op een gsm, met werkhandschoenen aan.',
+    ],
+    features: [
+      {
+        title: 'Werven en punten',
+        body:
+          'Per werf wat er nog moet gebeuren. Elk punt krijgt een actie — opvolging, info ' +
+          'nodig, regiewerk of prijs doorgeven — en een status die je in één blik ziet.',
+      },
+      {
+        title: 'Foto’s waarop je tekent',
+        body:
+          'Maak de foto op de werf en teken er meteen op: pijl, cirkel of markering. De notitie ' +
+          'blijft bij het punt staan, met de naam van wie ze schreef.',
+      },
+      {
+        title: 'Planning en Gantt',
+        body:
+          'Werken uitgezet in de tijd, en al je werven naast elkaar in één Gantt-overzicht — ' +
+          'per week, maand of kwartaal.',
+      },
+      {
+        title: 'Klantenportaal',
+        body:
+          'Eén link per klant, per werf. Jij bepaalt punt per punt wat hij ziet, en hij kan ' +
+          'reageren en zelf foto’s toevoegen.',
+      },
+    ],
+    decisions: [
+      {
+        title: 'De klant raakt binnen zonder account',
+        body:
+          'Toegang tot het portaal loopt via een e-mailadres en een pincode. Geen registratie, ' +
+          'geen wachtwoord om te vergeten, geen account dat iemand moet beheren.',
+        why:
+          'Een klant opent dit twee keer per jaar. Een registratieformulier is precies de plek ' +
+          'waar die persoon afhaakt, en een portaal dat niemand opent is minder waard dan een ' +
+          'mail. De prijs is echt: zonder identiteitsprovider draag je zelf de vervaltijd van ' +
+          'de link, de rate limiting en de reikwijdte van de sessie — en dat krijg je alleen ' +
+          'juist door het te testen als de verkeerde ontvanger.',
+      },
+      {
+        title: 'Zichtbaarheid wordt per punt beslist, niet per werf',
+        body:
+          'De aannemer zet elk punt op zichtbaar of intern. Prijzen die nog in discussie zijn, ' +
+          'opmerkingen over een onderaannemer en de notitie over een betwisting blijven binnen.',
+        why:
+          'Eén schakelaar per werf dwingt een keuze af tussen alles nuttigs verbergen en de ' +
+          'discussie over meerwerk tonen. Per punt is meer werk om te bouwen en het is de enige ' +
+          'fijnmazigheid die past bij hoe mensen echt over een werf praten.',
+      },
+      {
+        title: 'Annoteren gebeurt bij het punt, niet later op kantoor',
+        body:
+          'De pijl wordt op de gsm getekend, staand voor het ding zelf. De foto wordt opgeslagen ' +
+          'mét de markering, niet naast een beschrijving ervan.',
+        why:
+          'Een foto zonder markering is een discussie. Wie erbij stond weet over welke scheur ' +
+          'het gaat; drie weken later weet niemand dat nog, hijzelf ook niet. Het achteraf doen ' +
+          'is goedkoper om te bouwen en is precies de functie die stilletjes nooit gebruikt wordt.',
+      },
+      {
+        title: 'De planning loopt over werven heen, niet binnen één werf',
+        body:
+          'Het Gantt-overzicht zet elke lopende werf op dezelfde tijdlijn in plaats van elke ' +
+          'werf zijn eigen schema te geven.',
+        why:
+          'Eén werf plannen is niet moeilijk — dat zit al in het hoofd van de aannemer. De vraag ' +
+          'die geld kost is welke ploeg volgende dinsdag waar staat, en die vraag is onzichtbaar ' +
+          'tot de werven naast elkaar getekend staan.',
+      },
+    ],
+    process: [
+      {
+        step: '01',
+        title: 'Geen framework',
+        body:
+          'Pure JavaScript, gebundeld met esbuild. Deze app wordt geopend op een gsm op een dak ' +
+          'met slechte ontvangst, dus elke kilobyte is een seconde dat iemand staat te wachten.',
+      },
+      {
+        step: '02',
+        title: 'De database doet het werk',
+        body:
+          'Ruwweg 180 KB PL/pgSQL in Postgres: toegangsregels, statusovergangen en wat het ' +
+          'portaal van een werf te zien krijgt worden daar beslist, niet in de client.',
+      },
+      {
+        step: '03',
+        title: 'Push in plaats van pollen',
+        body:
+          'Web push, zodat een nieuw punt terechtkomt bij wie er iets mee moet, zonder dat ' +
+          'iemand een tabblad moet openhouden.',
+      },
+      {
+        step: '04',
+        title: 'Cloudflare van voor tot achter',
+        body:
+          'De marketingsite, de app en het portaal komen van de edge. Dat houdt het eerste ' +
+          'beeld snel op een werfverbinding en de vaste kost zo goed als nul.',
+      },
+    ],
+    live: {
+      label: 'Ga kijken',
+      body:
+        'Project-Point is een echt product, geen demo. De marketingsite legt het uit; de app ' +
+        'zelf zit achter een login, want daar staan echte werven in.',
+      cta: 'project-point.be',
+    },
+  },
+
+  operationsCase: {
     eyebrow: 'Case 02 · Onder NDA',
     title: 'Het systeem waar een bedrijf zijn dag in doorbrengt',
     standfirst:

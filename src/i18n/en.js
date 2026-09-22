@@ -19,6 +19,12 @@ export default {
         'planning, field execution, logistics, finance and a customer portal for an ' +
         'installation company — and the decisions underneath it.',
     },
+    projectPoint: {
+      title: 'Project-Point — Brent Ceulemans',
+      description:
+        'Site registration and project management for the building trade: points, photos, ' +
+        'planning and a customer portal. My own product, and the decisions behind it.',
+    },
     notFound: {
       title: 'Page not found — Brent Ceulemans',
       description: 'That page does not exist.',
@@ -63,6 +69,8 @@ export default {
       scope: { eyebrow: 'Scope', title: 'Five layers, one database', aside: 'every layer owns its colour' },
       engineering: { eyebrow: 'Engineering', title: 'Decisions that mattered', aside: 'and what the alternative costs' },
       process: { eyebrow: 'Process', title: 'How the work goes' },
+      whatItDoes: { eyebrow: 'Product', title: 'What it does', aside: 'four things, not forty' },
+      built: { eyebrow: 'Build', title: 'How it is built' },
       whyNot: 'Why not the other way',
       ndaLabel: 'Under NDA',
       next: 'Next',
@@ -175,7 +183,139 @@ export default {
     },
   ],
 
-  case: {
+  projectPointCase: {
+    eyebrow: 'Case 01 · Live product',
+    title: 'A snag list that survives the building site',
+    standfirst:
+      'Project-Point is my own product: site registration and project management for the ' +
+      'building trade. Points, photos and planning in one place, and a portal where the ' +
+      'customer follows along without sitting inside your administration.',
+    facts: [
+      { label: 'Role', value: 'My own product — design, build, run' },
+      { label: 'Live at', value: 'project-point.be' },
+      { label: 'Built with', value: 'Plain JavaScript · esbuild · Supabase · Cloudflare' },
+      { label: 'Shape', value: 'Site app, customer portal and marketing site' },
+    ],
+    problem: [
+      'A snag list on a building site lives in three places at once: photos in a group chat, ' +
+        'notes on the back of a delivery slip, and one phone call that never got written down. ' +
+        'Everybody has a version, nobody has the version.',
+      'The cost shows up at handover. Something was agreed in March, the photo proving it is ' +
+        'somewhere in a chat thread with four hundred other pictures, and the argument is no ' +
+        'longer about the work — it is about who remembers what.',
+      'So the product is not a project management tool that happens to have photos. It is a ' +
+        'point: a photo, a mark on that photo, an action, an owner and a status — captured ' +
+        'while standing in front of it, on a phone, with gloves on.',
+    ],
+    features: [
+      {
+        title: 'Sites and points',
+        body:
+          'Per site, what still has to happen. Every point carries an action — follow up, ' +
+          'information needed, extra work, price to confirm — and a status you read in one look.',
+      },
+      {
+        title: 'Photos you can draw on',
+        body:
+          'Take the photo on site and mark it immediately: arrow, circle, highlight. The note ' +
+          'stays attached to the point, with the name of whoever wrote it.',
+      },
+      {
+        title: 'Planning and Gantt',
+        body:
+          'Work laid out over time, and every site next to each other in one Gantt view — by ' +
+          'week, month or quarter.',
+      },
+      {
+        title: 'Customer portal',
+        body:
+          'One link per customer, per site. You decide point by point what they see, and they ' +
+          'can answer and add photos of their own.',
+      },
+    ],
+    decisions: [
+      {
+        title: 'The customer gets in without an account',
+        body:
+          'Access to the portal runs on an email address and a PIN. No registration, no ' +
+          'password to forget, no account to manage on either side.',
+        why:
+          'A customer opens this twice in a year. A registration form is exactly where that ' +
+          'person stops, and a portal nobody opens is worth less than an email. The cost is ' +
+          'real: without an identity provider you carry link expiry, rate limiting and session ' +
+          'scope yourself, and you only get that right by testing it as the wrong recipient.',
+      },
+      {
+        title: 'Visibility is decided per point, not per site',
+        body:
+          'The contractor marks each point as visible or internal. Prices under discussion, ' +
+          'remarks about a subcontractor and the note about a dispute stay on the inside.',
+        why:
+          'A single switch per site forces a choice between hiding everything useful and ' +
+          'showing the argument about extra work. Per point is more work to build and it is ' +
+          'the only granularity that matches how people actually talk about a job.',
+      },
+      {
+        title: 'Annotating happens at the point, not back at the office',
+        body:
+          'The arrow is drawn on the phone, standing in front of the thing. The photo is stored ' +
+          'with the mark, not next to a description of it.',
+        why:
+          'A photo without a mark is a discussion. Whoever was standing there knows which crack ' +
+          'it is about; three weeks later nobody does, including them. Doing it later is ' +
+          'cheaper to build and it is the feature that quietly never gets used.',
+      },
+      {
+        title: 'The planning runs across sites, not inside one',
+        body:
+          'The Gantt view puts every running site on one timeline instead of giving each site ' +
+          'its own chart.',
+        why:
+          'Planning one site is not hard — the contractor already has that in their head. The ' +
+          'question that costs money is which crew is standing where next Tuesday, and that ' +
+          'question is invisible until the sites are drawn next to each other.',
+      },
+    ],
+    process: [
+      {
+        step: '01',
+        title: 'No framework',
+        body:
+          'Plain JavaScript, bundled with esbuild. This app gets opened on a phone on a roof ' +
+          'over a bad connection, so every kilobyte is a second of someone standing still.',
+      },
+      {
+        step: '02',
+        title: 'The database does the work',
+        body:
+          'Roughly 180 KB of PL/pgSQL in Postgres: access rules, status transitions and the ' +
+          'portal’s view of a site are decided there, not in the client.',
+      },
+      {
+        step: '03',
+        title: 'Push, not polling',
+        body:
+          'Web push, so a new point reaches the person who has to act on it without anyone ' +
+          'keeping a tab open.',
+      },
+      {
+        step: '04',
+        title: 'Cloudflare end to end',
+        body:
+          'The marketing site, the app and the portal are served from the edge, which keeps ' +
+          'the first paint fast on a site connection and the running cost near zero.',
+      },
+    ],
+    live: {
+      label: 'See it running',
+      body:
+        'Project-Point is a live product, not a demo. The marketing site explains it in Dutch; ' +
+        'the app itself sits behind a login because it holds real sites.',
+      cta: 'project-point.be',
+    },
+  },
+
+  operationsCase: {
     eyebrow: 'Case 02 · Under NDA',
     title: 'The system a company spends its day inside',
     standfirst:

@@ -1,14 +1,19 @@
 ---
-/** The long-form case, in whichever language the route asked for.
- *  Used by /work/operations-platform/ and /<lang>/work/operations-platform/. */
+/** One long-form case, in whichever language and for whichever project the
+ *  route asked for. Sections appear when the case has content for them:
+ *  the five-layer grid and the NDA note belong to the platform case, the
+ *  feature grid and the live link to Project-Point. */
 import SectionHead from './SectionHead.astro'
 import { getSite, localePath, defaultLang } from '../i18n'
 
-const { lang = defaultLang } = Astro.props
+const { id, lang = defaultLang } = Astro.props
 const t = getSite(lang)
-const { case: study, layers, ui } = t
+const { layers, ui } = t
+const study = t.cases[id]
 
-const next = t.projects.find((p) => p.id === 'catchbox')
+const next = t.projects.find((p) => p.id === study.next)
+const nextAttrs = next.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+const processHead = study.features ? ui.case.built : ui.case.process
 ---
 
 <article class="case">
@@ -55,33 +60,63 @@ const next = t.projects.find((p) => p.id === 'catchbox')
     </div>
   </section>
 
-  <!-- ——— the shape ——— -->
-  <section class="band">
-    <div class="shell">
-      <SectionHead
-        eyebrow={ui.case.scope.eyebrow}
-        title={ui.case.scope.title}
-        aside={ui.case.scope.aside}
-        colour="quotes"
-      />
+  <!-- ——— what it covers ——— -->
+  {
+    study.layersNote && (
+      <section class="band">
+        <div class="shell">
+          <SectionHead
+            eyebrow={ui.case.scope.eyebrow}
+            title={ui.case.scope.title}
+            aside={ui.case.scope.aside}
+            colour="quotes"
+          />
 
-      <ol class="layers">
-        {
-          layers.map((layer, i) => (
-            <li class="reveal" style={`--c: var(--${layer.key}); --i: ${i % 3}`}>
-              <span class="layer-tick" aria-hidden="true" />
-              <h3>{layer.name}</h3>
-              <ul class="modules">
-                {layer.modules.map((module) => <li>{module}</li>)}
-              </ul>
-            </li>
-          ))
-        }
-      </ol>
+          <ol class="layers">
+            {layers.map((layer, i) => (
+              <li class="reveal" style={`--c: var(--${layer.key}); --i: ${i % 3}`}>
+                <span class="layer-tick" aria-hidden="true" />
+                <h3>{layer.name}</h3>
+                <ul class="modules">
+                  {layer.modules.map((module) => (
+                    <li>{module}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
 
-      <p class="aside-note reveal">{study.layersNote}</p>
-    </div>
-  </section>
+          <p class="aside-note reveal">{study.layersNote}</p>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ——— what it does ——— -->
+  {
+    study.features && (
+      <section class="band">
+        <div class="shell">
+          <SectionHead
+            eyebrow={ui.case.whatItDoes.eyebrow}
+            title={ui.case.whatItDoes.title}
+            aside={ui.case.whatItDoes.aside}
+            colour="quotes"
+          />
+
+          <ul class="features">
+            {study.features.map((feature, i) => (
+              <li class="reveal" style={`--c: var(--${layers[i % layers.length].key}); --i: ${i % 2}`}>
+                <span class="layer-tick" aria-hidden="true" />
+                <h3>{feature.title}</h3>
+                <p>{feature.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <!-- ——— decisions ——— -->
   <section class="band">
@@ -114,7 +149,7 @@ const next = t.projects.find((p) => p.id === 'catchbox')
   <!-- ——— process ——— -->
   <section class="band">
     <div class="shell">
-      <SectionHead eyebrow={ui.case.process.eyebrow} title={ui.case.process.title} colour="site" />
+      <SectionHead eyebrow={processHead.eyebrow} title={processHead.title} colour="site" />
 
       <ol class="steps">
         {
@@ -130,23 +165,38 @@ const next = t.projects.find((p) => p.id === 'catchbox')
     </div>
   </section>
 
-  <!-- ——— nda ——— -->
+  <!-- ——— nda / live ——— -->
   <section class="band">
     <div class="shell">
-      <aside class="nda reveal">
-        <p class="mono">{ui.case.ndaLabel}</p>
-        <p class="nda-body">{study.nda}</p>
-      </aside>
+      {
+        study.nda && (
+          <aside class="nda reveal">
+            <p class="mono">{ui.case.ndaLabel}</p>
+            <p class="nda-body">{study.nda}</p>
+          </aside>
+        )
+      }
+      {
+        study.live && (
+          <aside class="nda live reveal">
+            <p class="mono">{study.live.label}</p>
+            <p class="nda-body">{study.live.body}</p>
+            <a class="btn btn-solid live-cta" href={study.live.cta ? `https://${study.live.cta}` : '#'} target="_blank" rel="noopener noreferrer">
+              {study.live.cta} <span aria-hidden="true">↗</span>
+            </a>
+          </aside>
+        )
+      }
     </div>
   </section>
 
   <!-- ——— next ——— -->
   <section class="band next-band">
     <div class="shell">
-      <a class="next" href={next.href} target="_blank" rel="noopener noreferrer">
+      <a class="next" href={next.href} {...nextAttrs}>
         <span class="mono next-label">{ui.case.next} · {next.number} {ui.case.of} 04</span>
         <span class="next-name">{next.name}</span>
-        <span class="next-arrow" aria-hidden="true">↗</span>
+        <span class="next-arrow" aria-hidden="true">{next.external ? '↗' : '→'}</span>
       </a>
     </div>
   </section>
@@ -335,5 +385,27 @@ const next = t.projects.find((p) => p.id === 'catchbox')
     .layers > li:last-child { grid-column: auto; }
     .next { flex-wrap: wrap; gap: 0.6rem 1rem; }
     .next-name { width: 100%; order: 3; }
+  }
+
+  /* Project-Point: four things it does, same block language as the layers. */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .features > li { background: var(--bg); padding: 1.5rem 1.5rem 1.7rem; }
+  .features h3 { margin-top: 0.85rem; font-size: 1.12rem; font-weight: 700; letter-spacing: -0.024em; }
+  .features p { margin-top: 0.6rem; font-size: 0.95rem; line-height: 1.6; color: var(--ink-3); }
+
+  .live { border-left-color: var(--leads); }
+  .live .mono { color: var(--leads); }
+  .live-cta { margin-top: 1.2rem; box-shadow: 6px 6px 0 var(--leads); }
+  .live-cta:hover,
+  .live-cta:focus-visible { box-shadow: 9px 9px 0 var(--leads); }
+
+  @media (max-width: 760px) {
+    .features { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

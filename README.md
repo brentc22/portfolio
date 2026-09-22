@@ -73,15 +73,17 @@ src/
     Work.astro          the case grid
     CasePreview.astro   the per-case abstract, drawn in blocks — never a screenshot
     Approach.astro      four rules, one per layer
-    CaseStudy.astro     the long-form case, in the language the route asked for
+    CaseStudy.astro     one long-form case, driven by which project it is given
     SectionHead.astro   one heading treatment for every section
     Contact.astro       closing line, links, footer
   pages/
     index.astro                        en
     [lang]/index.astro                 nl, fr
-    work/operations-platform.astro     en
-    [lang]/work/operations-platform.astro
+    work/project-point.astro           en   (+ [lang]/work/…)
+    work/operations-platform.astro     en   (+ [lang]/work/…)
+    sitemap.xml.js                     ten URLs with their hreflang alternates
     404.astro                          one file, swaps language in the browser
+scripts/og.mjs          builds the nine social cards in public/og/
 ```
 
 Editing the page means editing `src/data/structure.js` and the three files in `src/i18n/`. The
@@ -119,6 +121,16 @@ a case file with its roles, a terminal pulling a code out of an email, a macOS m
 are built from `<span>` blocks and CSS, not from screenshots, so no client data ever leaves
 the client. Placeholders are written as `[amount]`, `[date]`, `[month]`: real numbers go in
 only once they have been measured.
+
+## Found and shared
+
+`npm run og` renders the social preview cards — one per page per language, nine in total — by
+screenshotting the site's own masthead treatment with headless Chrome. They are committed to
+`public/og/`, so a clone builds without Chrome; regenerate them when a headline changes.
+
+`src/pages/sitemap.xml.js` writes the sitemap by hand rather than pulling in an integration:
+ten URLs, each carrying `xhtml:link` alternates for all three languages plus `x-default`.
+Every page also emits a `Person` block as JSON-LD, claiming nothing the prose does not.
 
 ## Deploying
 

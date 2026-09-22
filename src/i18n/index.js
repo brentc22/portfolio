@@ -11,7 +11,7 @@ import {
   stack,
   projectMeta,
   principleMeta,
-  decisionLayers,
+  caseMeta,
   heroQuote,
 } from '../data/structure.js'
 
@@ -73,12 +73,22 @@ export function getSite(lang = defaultLang) {
 
     principles: principleMeta.map((meta, i) => ({ ...meta, ...d.principles[i] })),
 
-    case: {
-      ...d.case,
-      decisions: d.case.decisions.map((decision, i) => ({
-        ...decision,
-        layer: decisionLayers[i],
-      })),
+    cases: {
+      'project-point': buildCase(d.projectPointCase, caseMeta['project-point']),
+      'operations-platform': buildCase(d.operationsCase, caseMeta['operations-platform']),
     },
+  }
+}
+
+/** The decisions carry a layer colour that is the same in every language, so
+ *  it lives in the structure file and is folded in here. */
+function buildCase(words, meta) {
+  return {
+    ...words,
+    next: meta.next,
+    decisions: words.decisions.map((decision, i) => ({
+      ...decision,
+      layer: meta.decisionLayers[i],
+    })),
   }
 }
