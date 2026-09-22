@@ -1,17 +1,18 @@
 ---
-import { projects, layers } from '../data/site.js'
+import { projects } from '../data/site.js'
 import CasePreview from './CasePreview.astro'
+import SectionHead from './SectionHead.astro'
 ---
 
 <section class="work" id="work">
   <div class="shell">
-    <header class="section-head reveal">
-      <span class="spectrum dots" aria-hidden="true">
-        {layers.slice(0, 4).map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
-      </span>
-      <h2 class="mono">Selected work</h2>
-      <p class="mono note">four systems, not a gallery</p>
-    </header>
+    <SectionHead
+      eyebrow="Portfolio"
+      title="Selected work"
+      aside="four systems, not a gallery"
+      colour="leads"
+      id="work-title"
+    />
 
     <ul class="cases">
       {
@@ -51,18 +52,6 @@ import CasePreview from './CasePreview.astro'
 
 <style>
   .work { padding-block: clamp(3.5rem, 7vw, 5.5rem) 0; }
-
-  .section-head {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    margin-bottom: 1.6rem;
-  }
-
-  .dots span { width: 10px; height: 10px; }
-
-  .section-head h2 { font-size: 0.72rem; font-weight: 500; color: var(--ink-2); }
-  .note { margin-left: auto; font-size: 0.72rem; text-transform: none; letter-spacing: 0.04em; }
 
   .cases {
     display: grid;
@@ -156,6 +145,5 @@ import CasePreview from './CasePreview.astro'
 
   @media (max-width: 900px) {
     .cases { grid-template-columns: minmax(0, 1fr); }
-    .note { display: none; }
   }
 </style>

@@ -1,0 +1,63 @@
+---
+/** One heading treatment for every section: a coloured tick, a large
+ *  title, and an optional aside that drops away on narrow screens. */
+const { eyebrow, title, aside, colour = 'leads', id } = Astro.props
+---
+
+<header class="section-head reveal" style={`--c: var(--${colour})`}>
+  <span class="tick" aria-hidden="true"></span>
+  <div class="text">
+    {eyebrow && <p class="mono eyebrow">{eyebrow}</p>}
+    <h2 id={id}>{title}</h2>
+  </div>
+  {aside && <p class="mono aside">{aside}</p>}
+</header>
+
+<style>
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.1rem;
+    padding-bottom: 1.4rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tick {
+    width: 40px;
+    height: 6px;
+    flex: none;
+    margin-bottom: 0.72rem;
+    background: var(--c);
+  }
+
+  .text { min-width: 0; }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--ink-4);
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 4.2vw, 3.1rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .aside {
+    margin-left: auto;
+    margin-bottom: 0.55rem;
+    flex: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+  }
+
+  @media (max-width: 760px) {
+    .aside { display: none; }
+    .section-head { gap: 0.9rem; }
+    .tick { width: 28px; height: 5px; margin-bottom: 0.55rem; }
+  }
+</style>
