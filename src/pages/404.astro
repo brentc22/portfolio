@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import { layers } from '../data/site.js'
+---
+
+<Layout
+  title="Page not found — Brent Ceulemans"
+  description="That page does not exist."
+>
+  <Header />
+
+  <main id="main" class="notfound">
+    <div class="shell">
+      <p class="mono code rise">404</p>
+      <h1 class="rise" style="animation-delay: 0.08s">This route was never built.</h1>
+
+      <div class="spectrum rule rise" style="animation-delay: 0.16s">
+        {
+          layers.map((layer, i) => (
+            <span style={`background: var(--${layer.key}); animation-delay: ${0.3 + i * 0.09}s`} />
+          ))
+        }
+      </div>
+
+      <p class="lead rise" style="animation-delay: 0.24s">
+        Either the link is old or I moved something. The work and the contact details are all
+        one click away.
+      </p>
+
+      <div class="actions rise" style="animation-delay: 0.32s">
+        <a class="btn btn-solid" href="/">Back to the start</a>
+        <a class="btn btn-ghost" href="/#work">Selected work</a>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .notfound { padding-block: clamp(3.5rem, 9vw, 7rem) clamp(4rem, 10vw, 8rem); }
+
+  .code { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--portal); }
+
+  h1 {
+    margin-top: 1rem;
+    max-width: 16ch;
+    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .rule { height: 12px; max-width: 30rem; margin-top: 2rem; }
+  .rule span { flex: 1; transform-origin: left; animation: grow 0.55s var(--ease) both; }
+
+  .lead {
+    margin-top: 2rem;
+    max-width: 52ch;
+    font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+    line-height: 1.66;
+    color: var(--ink-3);
+  }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.4rem; }
+</style>

@@ -86,15 +86,24 @@ only once they have been measured.
 
 ## Deploying
 
-Static output, so anything that serves files will do. Cloudflare Pages:
+Live at **https://brentceulemans.pages.dev** on Cloudflare Pages. Static output, so anything
+that serves files will do:
 
 ```
 build command:     npm run build
 output directory:  dist
 ```
 
-Set `site` in `astro.config.mjs` to the final domain before the first deploy — it is what the
-canonical URL and the Open Graph tags are built from.
+Every push to `main` runs `.github/workflows/deploy.yml`: it builds the site and publishes it
+with `wrangler pages deploy`. Two repository secrets drive it — `CLOUDFLARE_ACCOUNT_ID` and
+`CLOUDFLARE_API_TOKEN` (a token with *Cloudflare Pages: Edit*). Without the token the workflow
+still builds, so the branch stays verified, and only the publish step is skipped.
+
+`public/_headers` ships the cache and security headers: hashed `/_astro/*` assets are immutable
+for a year, everything else gets `nosniff`, `DENY` framing and a strict referrer policy.
+
+Set `site` in `astro.config.mjs` to the final domain before pointing a custom domain at it — it
+is what the canonical URL and the Open Graph tags are built from.
 
 ## License
 
