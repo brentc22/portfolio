@@ -1,0 +1,337 @@
+---
+import { profile, layers } from '../data/site.js'
+
+const [lineOne, lineTwo, lineThree] = profile.headline
+const [before, after] = lineThree.split(profile.highlight)
+---
+
+<section class="hero" id="top">
+  <div class="shell hero-inner">
+    <div class="hero-copy">
+      <p class="rise chip">
+        <span class="chip-dot" aria-hidden="true"></span>
+        <span>{profile.availability}</span>
+      </p>
+
+      <h1 class="hero-title">
+        <span class="rise line">{lineOne}</span>
+        <span class="rise line" style="animation-delay: 0.09s">{lineTwo}</span>
+        <span class="rise line" style="animation-delay: 0.18s">
+          {before}<span class="mark">{profile.highlight}</span>{after}
+        </span>
+      </h1>
+
+      <div class="rise rule-wrap" style="animation-delay: 0.3s">
+        <div class="spectrum rule">
+          {
+            layers.map((layer, i) => (
+              <span style={`background: var(--${layer.key}); animation-delay: ${0.5 + i * 0.1}s`} />
+            ))
+          }
+        </div>
+        <ul class="rule-labels">
+          {layers.map((layer) => <li class="mono">{layer.name}</li>)}
+        </ul>
+      </div>
+
+      <p class="rise lead" style="animation-delay: 0.4s">{profile.lead}</p>
+
+      <div class="rise actions" style="animation-delay: 0.5s">
+        <a class="btn btn-solid" href="#work">See the work <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#approach">How I work</a>
+      </div>
+
+      <div class="rise stack" style="animation-delay: 0.6s">
+        <span class="mono stack-label">Stack</span>
+        <ul class="stack-list">
+          {profile.stack.map((item) => <li style={`background: var(--${item.layer})`}>{item.label}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Three panels, staggered rather than absolutely placed, so the
+         composition survives any column width. The depth is a hard offset
+         shadow — a second shape, never a blur. -->
+    <div class="hero-art" aria-hidden="true">
+      <article class="panel panel-quote">
+        <header class="panel-head">
+          <span class="mono" style="color: var(--quotes)">QT-2026-0184</span>
+          <span class="pill" style="background: var(--quotes)">Signed</span>
+        </header>
+        <div class="panel-body">
+          <p class="row"><span>Installation, 3 days</span><span class="num">[amount]</span></p>
+          <p class="row"><span>Materials</span><span class="num">[amount]</span></p>
+          <p class="row muted"><span>VAT · 6% renovation</span><span class="num">auto</span></p>
+          <p class="row total"><span>Total incl.</span><span class="big">[total]</span></p>
+        </div>
+      </article>
+
+      <article class="panel panel-system">
+        <div class="spectrum panel-rule">
+          {layers.map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
+        </div>
+        <header class="panel-head">
+          <span class="head-live">
+            <span class="dot-cycle"></span><span class="mono">The system</span>
+          </span>
+          <span class="mono live">live<span class="caret">_</span></span>
+        </header>
+        <ul class="stages">
+          {
+            layers.map((layer, i) => (
+              <li>
+                <span class="stage-name">{layer.name}</span>
+                <span class="meter">
+                  <span style={`background: var(--${layer.key}); animation-delay: ${0.95 + i * 0.1}s`} />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <footer class="panel-foot mono">every role its own interface · RLS as the floor</footer>
+      </article>
+
+      <article class="panel panel-point">
+        <header class="point-head">
+          <span class="dot-tick"></span>
+          <span class="mono" style="color: var(--site)">Site point · resolved</span>
+        </header>
+        <p class="point-body">
+          Photo, annotation and owner hang off the point. The customer sees exactly what they
+          are allowed to see — nothing more.
+        </p>
+        <p class="mono point-foot">raised [date] · closed [date]</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; padding-block: clamp(2.5rem, 5vw, 4.5rem) 0; }
+
+  /* A visible layout grid instead of a glow: eight faint column rules. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--rule) 0 1px,
+      transparent 1px calc(100% / 8)
+    );
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .hero-copy { min-width: 0; max-width: 43rem; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    max-width: 100%;
+    margin-bottom: 1.6rem;
+    padding: 0.5rem 1rem 0.5rem 0.62rem;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .chip-dot { width: 8px; height: 8px; flex: none; animation: cycle 10s linear infinite; }
+
+  .hero-title {
+    font-size: clamp(2rem, 5.6vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    text-wrap: nowrap;
+  }
+  .hero-title .line { display: block; }
+
+  .mark {
+    display: inline-block;
+    padding: 0 0.22em 0.06em;
+    background: var(--portal);
+    color: var(--bg);
+  }
+
+  .rule-wrap { margin-top: 2rem; max-width: 35.5rem; }
+  .rule { height: 14px; }
+  .rule span { flex: 1; transform-origin: left; animation: grow 0.55s var(--ease) both; }
+
+  .rule-labels { display: flex; margin-top: 0.75rem; }
+  .rule-labels li {
+    flex: 1;
+    min-width: 0;
+    font-size: clamp(0.54rem, 1.1vw, 0.66rem);
+    letter-spacing: 0.1em;
+  }
+
+  .lead { margin-top: 1.9rem; max-width: 34rem; font-size: clamp(1rem, 1.2vw, 1.14rem); color: var(--ink-3); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.1rem; }
+
+  .stack {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.2rem;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .stack-label { font-size: 0.64rem; }
+  .stack-list { display: flex; flex-wrap: wrap; }
+  .stack-list li {
+    padding: 0.4rem 0.78rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.73rem;
+    color: var(--bg);
+  }
+
+  /* --- the composition --- */
+  .hero-art {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+    padding-right: 12px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    animation: rise 0.8s var(--ease) both;
+  }
+
+  .panel-quote {
+    width: min(86%, 22rem);
+    align-self: flex-end;
+    box-shadow: 10px 10px 0 var(--quotes);
+    animation-delay: 0.55s;
+  }
+
+  .panel-system {
+    width: 100%;
+    border-color: rgb(255 255 255 / 0.16);
+    box-shadow: 12px 12px 0 var(--portal);
+    animation-delay: 0.66s;
+  }
+
+  .panel-point {
+    width: min(88%, 22rem);
+    align-self: flex-end;
+    border-left: 5px solid var(--site);
+    box-shadow: 10px 10px 0 var(--site);
+    padding: 1.05rem 1.2rem;
+    animation-delay: 0.77s;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .panel-head .mono { font-size: 0.66rem; }
+
+  .head-live { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .dot-cycle { width: 8px; height: 8px; animation: cycle 10s linear infinite; }
+  .live { color: var(--ink-5); }
+  .caret { animation: blink 1.1s step-end infinite; }
+
+  .pill {
+    padding: 0.24rem 0.6rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bg);
+  }
+
+  .panel-body { padding: 0.85rem 1.1rem 1rem; }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+    border-top: 1px solid var(--line-soft);
+  }
+  .row:first-child { border-top: 0; }
+  .row.muted { color: var(--ink-4); }
+  .num { font-family: 'Azeret Mono', ui-monospace, monospace; color: var(--ink); }
+  .row.total {
+    margin-top: 0.55rem;
+    padding-top: 0.65rem;
+    border-top: 2px solid var(--quotes);
+    align-items: baseline;
+  }
+  .big { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+
+  .panel-rule { height: 6px; }
+  .panel-rule span { flex: 1; }
+
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+  }
+  .stages li { background: var(--surface-sunk); padding: 0.95rem 0.6rem 1.1rem; }
+  .stage-name { display: block; font-size: 0.76rem; font-weight: 600; }
+  .meter { display: block; height: 6px; margin-top: 0.75rem; background: rgb(255 255 255 / 0.07); overflow: hidden; }
+  .meter span { display: block; height: 100%; transform-origin: left; animation: grow 0.6s var(--ease) both; }
+
+  .panel-foot {
+    padding: 0.65rem 1.1rem;
+    background: var(--bg-sunk);
+    border-top: 1px solid var(--line);
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    text-transform: none;
+  }
+
+  .point-head { display: flex; align-items: center; gap: 0.6rem; }
+  .dot-tick { width: 8px; height: 8px; background: var(--site); animation: tick 2s ease-in-out infinite; }
+  .point-head .mono { font-size: 0.66rem; }
+  .point-body { margin-top: 0.6rem; font-size: 0.86rem; line-height: 1.55; color: var(--ink-2); }
+  .point-foot {
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.64rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  @media (max-width: 1100px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); }
+    .hero-art { margin-top: 2.4rem; padding-right: 14px; }
+    .panel-quote,
+    .panel-point { align-self: stretch; width: 100%; }
+  }
+
+  /* Below the tablet breakpoint the headline wraps like normal prose and
+     the five stages fold into two columns. */
+  @media (max-width: 760px) {
+    .hero-title { font-size: clamp(2rem, 8.4vw, 3rem); text-wrap: balance; }
+    .hero-title .line { display: inline; }
+    .rule-labels li { letter-spacing: 0.04em; }
+    .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stages li:last-child { grid-column: 1 / -1; }
+    .panel-quote { display: none; }
+  }
+</style>

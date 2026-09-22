@@ -1,0 +1,73 @@
+---
+import { principles } from '../data/site.js'
+---
+
+<section class="approach" id="approach">
+  <div class="shell">
+    <header class="section-head reveal">
+      <span class="tick" aria-hidden="true"></span>
+      <h2 class="mono">How I work</h2>
+    </header>
+
+    <ul class="rules">
+      {
+        principles.map((rule, i) => (
+          <li class="reveal" style={`--c: var(--${rule.layer}); --i: ${i % 2}`}>
+            <h3>{rule.title}</h3>
+            <p>{rule.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .approach { padding-block: clamp(3.5rem, 7vw, 5.5rem) 0; }
+
+  .section-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.6rem; }
+  .tick { width: 34px; height: 5px; background: var(--invoices); }
+  .section-head h2 { font-size: 0.72rem; font-weight: 500; color: var(--ink-2); }
+
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .rules > li {
+    position: relative;
+    background: var(--bg);
+    padding: 1.9rem 1.9rem 2.1rem;
+  }
+
+  /* The layer colour stays a hairline until you are reading the card. */
+  .rules > li::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 4px;
+    background: var(--c);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.35s var(--ease);
+  }
+  .rules > li:hover::before { transform: scaleY(1); }
+
+  h3 {
+    font-size: 1.22rem;
+    font-weight: 800;
+    letter-spacing: -0.028em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  p { margin-top: 0.75rem; font-size: 0.96rem; line-height: 1.62; color: var(--ink-3); }
+
+  @media (max-width: 860px) {
+    .rules { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

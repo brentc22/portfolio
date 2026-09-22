@@ -1,0 +1,98 @@
+---
+import { profile, layers } from '../data/site.js'
+---
+
+<header class="site-head">
+  <div class="shell head-inner">
+    <a class="brand" href="#top">
+      <span class="spectrum brand-mark" aria-hidden="true">
+        {layers.map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
+      </span>
+      <span class="brand-name">{profile.name}</span>
+    </a>
+
+    <nav class="head-nav" aria-label="Primary">
+      <a href="#work" style="--u: var(--leads)">Work</a>
+      <a href="#approach" style="--u: var(--site)">Approach</a>
+      <a href="#contact" style="--u: var(--invoices)">Contact</a>
+      <a class="btn btn-solid btn-sm" href={`mailto:${profile.email}`}>Start a conversation</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .head-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 82px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .brand-mark { gap: 2px; }
+  .brand-mark span { width: 7px; height: 26px; }
+
+  .brand-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.024em;
+    white-space: nowrap;
+  }
+
+  .head-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.4vw, 2.1rem);
+  }
+
+  .head-nav a:not(.btn) {
+    position: relative;
+    padding-block: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+
+  .head-nav a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--u);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s var(--ease);
+  }
+
+  .head-nav a:not(.btn):hover,
+  .head-nav a:not(.btn):focus-visible { color: var(--ink); }
+
+  .head-nav a:not(.btn):hover::after,
+  .head-nav a:not(.btn):focus-visible::after { transform: scaleX(1); }
+
+  @media (max-width: 720px) {
+    .brand-name { display: none; }
+    .head-nav a:not(.btn) { display: none; }
+    .head-inner { min-height: 66px; }
+  }
+</style>

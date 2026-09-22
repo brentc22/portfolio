@@ -1,0 +1,78 @@
+---
+import { profile, layers } from '../data/site.js'
+const year = new Date().getFullYear()
+---
+
+<section class="contact" id="contact">
+  <div class="shell">
+    <div class="pitch reveal">
+      <p class="claim">
+        Run the check, read the output, <span class="mark">then</span> say it works.
+      </p>
+      <div class="cta">
+        <a class="btn btn-solid" href={`mailto:${profile.email}`}>
+          {profile.email} <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn btn-ghost" href={profile.github} target="_blank" rel="noopener noreferrer">
+          GitHub <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="spectrum foot-rule" aria-hidden="true">
+    {layers.map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
+  </div>
+
+  <footer class="shell foot">
+    <p class="mono">© {year} {profile.name}</p>
+    <p class="mono">{profile.role}</p>
+  </footer>
+</section>
+
+<style>
+  .contact { padding-top: clamp(3.5rem, 7vw, 5.5rem); }
+
+  .pitch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .claim {
+    max-width: 38rem;
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+    font-weight: 800;
+    letter-spacing: -0.032em;
+    line-height: 1.32;
+    color: var(--ink-2);
+  }
+
+  .mark {
+    display: inline-block;
+    padding: 0 0.24em 0.04em;
+    background: var(--site);
+    color: var(--bg);
+  }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+
+  .foot-rule { height: 6px; }
+  .foot-rule span { flex: 1; }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.6rem 2.2rem;
+  }
+  .foot .mono { font-size: 0.68rem; letter-spacing: 0.1em; }
+
+  @media (max-width: 560px) {
+    .foot { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+  }
+</style>

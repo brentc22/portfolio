@@ -1,0 +1,158 @@
+---
+/** A small abstract of what each system does, drawn in blocks.
+ *  Not a screenshot: nothing here leaks a client's data. */
+const { kind, layer } = Astro.props
+const c = `var(--${layer})`
+---
+
+<div class="preview" data-kind={kind}>
+  {
+    kind === 'points' && (
+      <>
+        <p class="line">
+          <span class="thumb on" style={`border-color: ${c}; background: color-mix(in srgb, ${c} 18%, transparent)`} />
+          <span class="bar" />
+          <span class="tag solid" style={`background: ${c}`}>Open</span>
+        </p>
+        <p class="line">
+          <span class="thumb" />
+          <span class="bar short" />
+          <span class="tag">Closed</span>
+        </p>
+        <p class="line">
+          <span class="thumb" />
+          <span class="bar shorter" />
+          <span class="tag">Closed</span>
+        </p>
+      </>
+    )
+  }
+
+  {
+    kind === 'dossier' && (
+      <>
+        <p class="roles">
+          <span style={`background: ${c}`} />
+          <span style={`background: color-mix(in srgb, ${c} 60%, transparent)`} />
+          <span style={`background: color-mix(in srgb, ${c} 35%, transparent)`} />
+          <span /><span /><span />
+        </p>
+        <p class="line"><span class="bar w-lg" /><span class="bar grow" /><span class="bar w-sm" style={`background: ${c}`} /></p>
+        <p class="line"><span class="bar w-md" /><span class="bar grow" /><span class="bar w-sm" /></p>
+        <p class="line"><span class="bar w-lg" /><span class="bar grow" /><span class="bar w-sm" /></p>
+      </>
+    )
+  }
+
+  {
+    kind === 'inbox' && (
+      <>
+        <p class="term">
+          <span class="prompt">$</span> catchbox code --wait
+        </p>
+        <p class="code" style={`color: ${c}`}>482910</p>
+        <p class="line"><span class="bar w-md" /><span class="tag">copied</span></p>
+        <p class="line"><span class="bar grow" /><span class="tag solid" style={`background: ${c}`}>Link</span></p>
+      </>
+    )
+  }
+
+  {
+    kind === 'menubar' && (
+      <>
+        <p class="menubar">
+          <span class="icon" /><span class="bar w-md" />
+          <span class="spacer" />
+          <span class="divider" style={`background: ${c}`} />
+          <span class="icon" /><span class="icon" /><span class="bar w-sm" />
+        </p>
+        <p class="line hidden-label"><span class="mono" style={`color: ${c}`}>hidden</span><span class="hair" /></p>
+        <p class="icons">
+          <span class="icon" /><span class="icon" /><span class="icon" /><span class="icon" /><span class="icon" />
+        </p>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .preview {
+    height: 176px;
+    padding: 1.15rem 1.3rem;
+    background: var(--surface-sunk);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .line:first-child { border-top: 0; }
+
+  .thumb {
+    width: 34px; height: 26px;
+    flex: none;
+    background: rgb(255 255 255 / 0.07);
+    border: 1px solid var(--line);
+  }
+
+  .bar { height: 7px; background: rgb(255 255 255 / 0.15); flex-grow: 1; }
+  .bar.short { max-width: 68%; background: rgb(255 255 255 / 0.09); }
+  .bar.shorter { max-width: 44%; background: rgb(255 255 255 / 0.09); }
+  .bar.grow { flex-grow: 1; background: rgb(255 255 255 / 0.08); }
+  .bar.w-lg { width: 96px; flex: none; background: rgb(255 255 255 / 0.16); }
+  .bar.w-md { width: 66px; flex: none; background: rgb(255 255 255 / 0.16); }
+  .bar.w-sm { width: 52px; flex: none; background: rgb(255 255 255 / 0.12); }
+
+  .tag {
+    flex: none;
+    padding: 0.18rem 0.44rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-5);
+    border: 1px solid var(--line);
+  }
+  .tag.solid { color: var(--bg); border-color: transparent; }
+
+  .roles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; margin-bottom: 0.9rem; }
+  .roles span { height: 22px; background: rgb(255 255 255 / 0.08); }
+
+  .term {
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.74rem;
+    color: var(--ink-3);
+  }
+  .prompt { color: var(--ink-5); margin-right: 0.4rem; }
+  .code {
+    margin-top: 0.4rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 1.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  .menubar {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    height: 34px;
+    padding-inline: 0.75rem;
+    background: #1c1f24;
+    border: 1px solid var(--line);
+  }
+  .spacer { flex-grow: 1; }
+  .divider { width: 5px; height: 18px; flex: none; }
+  .icon { width: 13px; height: 13px; flex: none; background: rgb(255 255 255 / 0.2); }
+
+  .hidden-label { margin-top: 0.9rem; border-top: 0; }
+  .hidden-label .mono { font-size: 0.6rem; letter-spacing: 0.1em; }
+  .hair { flex-grow: 1; height: 1px; background: var(--line); }
+
+  .icons { display: flex; gap: 0.44rem; margin-top: 0.15rem; opacity: 0.45; }
+</style>

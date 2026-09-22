@@ -1,0 +1,67 @@
+---
+import '../styles/global.css'
+
+const {
+  title = 'Brent Ceulemans — Custom CRM & operations platforms',
+  description = 'I build the systems companies actually run on: custom CRM and operations platforms, from the first inbound lead to the settled invoice.',
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0c0d10" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Azeret+Mono:wght@400;500&display=swap"
+    />
+
+    <script is:inline>
+      // Marks the document so the reveal styles only apply when JS can undo them.
+      document.documentElement.classList.add('js')
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <slot />
+
+    <script>
+      // Reveal on scroll. Without JS the .js class is absent and everything
+      // renders at full opacity, so the page never depends on this running.
+      const items = document.querySelectorAll('.reveal')
+      if (items.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue
+              entry.target.classList.add('is-in')
+              io.unobserve(entry.target)
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        )
+        for (const item of items) io.observe(item)
+      } else {
+        for (const item of items) item.classList.add('is-in')
+      }
+    </script>
+  </body>
+</html>
