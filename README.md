@@ -2,7 +2,7 @@
 
 # portfolio
 
-**brentceulemans.be** — a single page about the systems I build.
+**[brentceulemans.pages.dev](https://brentceulemans.pages.dev)** — a page about the systems I build.
 
 ![Astro](https://img.shields.io/badge/Astro-5-BC52EE?style=flat-square&logo=astro&logoColor=white)
 ![No runtime JS framework](https://img.shields.io/badge/client_JS-~1kB-1fc8db?style=flat-square)
@@ -102,8 +102,9 @@ still builds, so the branch stays verified, and only the publish step is skipped
 `public/_headers` ships the cache and security headers: hashed `/_astro/*` assets are immutable
 for a year, everything else gets `nosniff`, `DENY` framing and a strict referrer policy.
 
-Set `site` in `astro.config.mjs` to the final domain before pointing a custom domain at it — it
-is what the canonical URL and the Open Graph tags are built from.
+`site` in `astro.config.mjs` is what the canonical URL and the Open Graph tags are built from,
+so it has to be the domain the site is actually served on. Point a custom domain at the Pages
+project and change that line in the same commit.
 
 ## License
 
