@@ -1,5 +1,9 @@
 ---
-import { profile, layers } from '../data/site.js'
+import { getSite, defaultLang } from '../i18n'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
+const { profile, layers, ui } = t
 const year = new Date().getFullYear()
 ---
 
@@ -7,14 +11,14 @@ const year = new Date().getFullYear()
   <div class="shell">
     <div class="pitch reveal">
       <p class="claim">
-        Run the check, read the output, <span class="mark">then</span> say it works.
+        {ui.contact.claimBefore}<span class="mark">{ui.contact.claimMark}</span>{ui.contact.claimAfter}
       </p>
       <div class="cta">
         <a class="btn btn-solid" href={`mailto:${profile.email}`}>
           {profile.email} <span aria-hidden="true">→</span>
         </a>
         <a class="btn btn-ghost" href={profile.github} target="_blank" rel="noopener noreferrer">
-          GitHub <span aria-hidden="true">↗</span>
+          {ui.contact.github} <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -26,7 +30,7 @@ const year = new Date().getFullYear()
 
   <footer class="shell foot">
     <p class="mono">© {year} {profile.name}</p>
-    <p class="mono">{profile.role}</p>
+    <p class="mono">{ui.contact.role}</p>
   </footer>
 </section>
 

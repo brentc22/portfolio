@@ -1,0 +1,55 @@
+---
+/** Three links, not a <select>: a crawler follows a link, and a visitor sees
+ *  all three options without opening anything. The current one is marked with
+ *  aria-current so it is announced, not only coloured. */
+import { languages, localePath } from '../i18n'
+
+const { lang, label } = Astro.props
+const here = Astro.url.pathname
+---
+
+<nav class="langs" aria-label={label}>
+  {
+    languages.map((l) => (
+      <a
+        href={localePath(here, l.code)}
+        hreflang={l.code}
+        lang={l.code}
+        title={l.name}
+        class:list={['lang', { on: l.code === lang }]}
+        aria-current={l.code === lang ? 'true' : undefined}
+      >
+        {l.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .langs {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--line);
+  }
+
+  .lang {
+    padding: 0.42rem 0.6rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-4);
+    text-decoration: none;
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+
+  .lang + .lang { border-left: 1px solid var(--line); }
+
+  .lang:hover,
+  .lang:focus-visible { color: var(--ink); background: var(--surface); }
+
+  .lang.on {
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 500;
+  }
+</style>

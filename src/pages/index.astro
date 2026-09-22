@@ -5,14 +5,17 @@ import Hero from '../components/Hero.astro'
 import Work from '../components/Work.astro'
 import Approach from '../components/Approach.astro'
 import Contact from '../components/Contact.astro'
+import { defaultLang } from '../i18n'
+
+const lang = defaultLang
 ---
 
-<Layout>
-  <Header />
+<Layout lang={lang} page="home">
+  <Header lang={lang} />
   <main id="main">
-    <Hero />
-    <Work />
-    <Approach />
-    <Contact />
+    <Hero lang={lang} />
+    <Work lang={lang} />
+    <Approach lang={lang} />
+    <Contact lang={lang} />
   </main>
 </Layout>

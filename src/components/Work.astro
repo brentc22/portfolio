@@ -1,22 +1,25 @@
 ---
-import { projects } from '../data/site.js'
+import { getSite, defaultLang } from '../i18n'
 import CasePreview from './CasePreview.astro'
 import SectionHead from './SectionHead.astro'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
 ---
 
 <section class="work" id="work">
   <div class="shell">
     <SectionHead
-      eyebrow="Portfolio"
-      title="Selected work"
-      aside="four systems, not a gallery"
+      eyebrow={t.ui.work.eyebrow}
+      title={t.ui.work.title}
+      aside={t.ui.work.aside}
       colour="leads"
       id="work-title"
     />
 
     <ul class="cases">
       {
-        projects.map((project, i) => (
+        t.projects.map((project, i) => (
           <li class="reveal" style={`--i: ${i % 2}`}>
             <a
               class="case"
@@ -25,7 +28,7 @@ import SectionHead from './SectionHead.astro'
               {...(project.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               <span class="case-rule" />
-              <CasePreview kind={project.preview} layer={project.layer} />
+              <CasePreview kind={project.preview} layer={project.layer} words={t.ui.preview} />
               <span class="preview-label mono">{project.previewLabel}</span>
 
               <span class="case-body">

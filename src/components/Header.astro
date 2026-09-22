@@ -1,21 +1,30 @@
 ---
-import { profile, layers } from '../data/site.js'
+import { getSite, localePath, defaultLang } from '../i18n'
+import LangSwitcher from './LangSwitcher.astro'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
+
+/** Anchors are written against the home page of this language, so the
+ *  masthead works from the case page too. */
+const home = localePath('/', lang)
 ---
 
 <header class="site-head">
   <div class="shell head-inner">
-    <a class="brand" href="#top">
+    <a class="brand" href={home}>
       <span class="spectrum brand-mark" aria-hidden="true">
-        {layers.map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
+        {t.layers.map((layer) => <span style={`background: var(--${layer.key})`}></span>)}
       </span>
-      <span class="brand-name">{profile.name}</span>
+      <span class="brand-name">{t.profile.name}</span>
     </a>
 
     <nav class="head-nav" aria-label="Primary">
-      <a href="#work" style="--u: var(--leads)">Work</a>
-      <a href="#approach" style="--u: var(--site)">Approach</a>
-      <a href="#contact" style="--u: var(--invoices)">Contact</a>
-      <a class="btn btn-solid btn-sm" href={`mailto:${profile.email}`}>Start a conversation</a>
+      <a href={`${home}#work`} style="--u: var(--leads)">{t.ui.nav.work}</a>
+      <a href={`${home}#approach`} style="--u: var(--site)">{t.ui.nav.approach}</a>
+      <a href={`${home}#contact`} style="--u: var(--invoices)">{t.ui.nav.contact}</a>
+      <LangSwitcher lang={lang} label={t.ui.language} />
+      <a class="btn btn-solid btn-sm" href={`mailto:${t.profile.email}`}>{t.ui.nav.cta}</a>
     </nav>
   </div>
 </header>

@@ -1,7 +1,7 @@
 ---
 /** A small abstract of what each system does, drawn in blocks.
  *  Not a screenshot: nothing here leaks a client's data. */
-const { kind, layer } = Astro.props
+const { kind, layer, words } = Astro.props
 const c = `var(--${layer})`
 ---
 
@@ -12,17 +12,17 @@ const c = `var(--${layer})`
         <p class="line">
           <span class="thumb on" style={`border-color: ${c}; background: color-mix(in srgb, ${c} 18%, transparent)`} />
           <span class="bar" />
-          <span class="tag solid" style={`background: ${c}`}>Open</span>
+          <span class="tag solid" style={`background: ${c}`}>{words.open}</span>
         </p>
         <p class="line">
           <span class="thumb" />
           <span class="bar short" />
-          <span class="tag">Closed</span>
+          <span class="tag">{words.closed}</span>
         </p>
         <p class="line">
           <span class="thumb" />
           <span class="bar shorter" />
-          <span class="tag">Closed</span>
+          <span class="tag">{words.closed}</span>
         </p>
       </>
     )
@@ -51,8 +51,8 @@ const c = `var(--${layer})`
           <span class="prompt">$</span> catchbox code --wait
         </p>
         <p class="code" style={`color: ${c}`}>482910</p>
-        <p class="line"><span class="bar w-md" /><span class="tag">copied</span></p>
-        <p class="line"><span class="bar grow" /><span class="tag solid" style={`background: ${c}`}>Link</span></p>
+        <p class="line"><span class="bar w-md" /><span class="tag">{words.copied}</span></p>
+        <p class="line"><span class="bar grow" /><span class="tag solid" style={`background: ${c}`}>{words.link}</span></p>
       </>
     )
   }
@@ -66,7 +66,7 @@ const c = `var(--${layer})`
           <span class="divider" style={`background: ${c}`} />
           <span class="icon" /><span class="icon" /><span class="bar w-sm" />
         </p>
-        <p class="line hidden-label"><span class="mono" style={`color: ${c}`}>hidden</span><span class="hair" /></p>
+        <p class="line hidden-label"><span class="mono" style={`color: ${c}`}>{words.hidden}</span><span class="hair" /></p>
         <p class="icons">
           <span class="icon" /><span class="icon" /><span class="icon" /><span class="icon" /><span class="icon" />
         </p>

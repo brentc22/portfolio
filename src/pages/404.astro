@@ -1,39 +1,65 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Header from '../components/Header.astro'
-import { layers } from '../data/site.js'
+import { getSite, dictionaries, defaultLang, localePath } from '../i18n'
+
+const lang = defaultLang
+const t = getSite(lang)
+
+/** A static host serves one 404.html for every unknown path, so this page
+ *  cannot know its language at build time. It renders in the default
+ *  language and carries the other two with it, to be swapped in the browser
+ *  from the path (/nl/…) or the visitor's own language setting. */
+const strings = Object.fromEntries(
+  Object.entries(dictionaries).map(([code, d]) => [
+    code,
+    { ...d.ui.notFound, homeHref: localePath('/', code), workHref: `${localePath('/', code)}#work` },
+  ]),
+)
 ---
 
-<Layout
-  title="Page not found — Brent Ceulemans"
-  description="That page does not exist."
->
-  <Header />
+<Layout lang={lang} page="notFound">
+  <Header lang={lang} />
 
   <main id="main" class="notfound">
     <div class="shell">
       <p class="mono code rise">404</p>
-      <h1 class="rise" style="animation-delay: 0.08s">This route was never built.</h1>
+      <h1 class="rise" style="animation-delay: 0.08s" data-nf="title">{t.ui.notFound.title}</h1>
 
       <div class="spectrum rule rise" style="animation-delay: 0.16s">
         {
-          layers.map((layer, i) => (
+          t.layers.map((layer, i) => (
             <span style={`background: var(--${layer.key}); animation-delay: ${0.3 + i * 0.09}s`} />
           ))
         }
       </div>
 
-      <p class="lead rise" style="animation-delay: 0.24s">
-        Either the link is old or I moved something. The work and the contact details are all
-        one click away.
-      </p>
+      <p class="lead rise" style="animation-delay: 0.24s" data-nf="body">{t.ui.notFound.body}</p>
 
       <div class="actions rise" style="animation-delay: 0.32s">
-        <a class="btn btn-solid" href="/">Back to the start</a>
-        <a class="btn btn-ghost" href="/#work">Selected work</a>
+        <a class="btn btn-solid" href="/" data-nf="home">{t.ui.notFound.home}</a>
+        <a class="btn btn-ghost" href="/#work" data-nf="work">{t.ui.notFound.work}</a>
       </div>
     </div>
   </main>
+
+  <script is:inline define:vars={{ strings, defaultLang }}>
+    const fromPath = location.pathname.split('/')[1]
+    const fromBrowser = (navigator.language || '').slice(0, 2).toLowerCase()
+    const lang = strings[fromPath] ? fromPath : strings[fromBrowser] ? fromBrowser : defaultLang
+    if (lang !== defaultLang) {
+      const s = strings[lang]
+      document.documentElement.lang = lang
+      document.querySelector('[data-nf="title"]').textContent = s.title
+      document.querySelector('[data-nf="body"]').textContent = s.body
+      const home = document.querySelector('[data-nf="home"]')
+      home.textContent = s.home
+      home.href = s.homeHref
+      const work = document.querySelector('[data-nf="work"]')
+      work.textContent = s.work
+      work.href = s.workHref
+    }
+  </script>
 </Layout>
 
 <style>

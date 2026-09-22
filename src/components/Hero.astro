@@ -1,8 +1,19 @@
 ---
-import { profile, layers } from '../data/site.js'
+import { getSite, defaultLang } from '../i18n'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
+const { profile, layers, ui, heroQuote } = t
 
 const [lineOne, lineTwo, lineThree] = profile.headline
 const [before, after] = lineThree.split(profile.highlight)
+
+/** The headline never wraps: its line breaks are set by hand, one set per
+ *  language. So the type has to scale to the longest line instead, or a
+ *  longer language runs out of the column and under the art. 17 is the
+ *  reference length — the longest line of the English original. */
+const longestLine = Math.max(...profile.headline.map((line) => line.length))
+const titleScale = Math.min(1, 17 / longestLine)
 ---
 
 <section class="hero" id="top">
@@ -13,7 +24,10 @@ const [before, after] = lineThree.split(profile.highlight)
         <span>{profile.availability}</span>
       </p>
 
-      <h1 class="hero-title">
+      <h1
+        class="hero-title"
+        style={`--title-vw: ${(5.6 * titleScale).toFixed(2)}vw; --title-max: ${(5 * titleScale).toFixed(2)}rem`}
+      >
         <span class="rise line">{lineOne}</span>
         <span class="rise line" style="animation-delay: 0.09s">{lineTwo}</span>
         <span class="rise line" style="animation-delay: 0.18s">
@@ -37,12 +51,12 @@ const [before, after] = lineThree.split(profile.highlight)
       <p class="rise lead" style="animation-delay: 0.4s">{profile.lead}</p>
 
       <div class="rise actions" style="animation-delay: 0.5s">
-        <a class="btn btn-solid" href="#work">See the work <span aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="#approach">How I work</a>
+        <a class="btn btn-solid" href="#work">{ui.hero.seeWork} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#approach">{ui.hero.howIWork}</a>
       </div>
 
       <div class="rise stack" style="animation-delay: 0.6s">
-        <span class="mono stack-label">Stack</span>
+        <span class="mono stack-label">{ui.hero.stack}</span>
         <ul class="stack-list">
           {profile.stack.map((item) => <li style={`background: var(--${item.layer})`}>{item.label}</li>)}
         </ul>
@@ -55,14 +69,17 @@ const [before, after] = lineThree.split(profile.highlight)
     <div class="hero-art" aria-hidden="true">
       <article class="panel panel-quote">
         <header class="panel-head">
-          <span class="mono" style="color: var(--quotes)">QT-2026-0184</span>
-          <span class="pill" style="background: var(--quotes)">Signed</span>
+          <span class="mono" style="color: var(--quotes)">{heroQuote.ref}</span>
+          <span class="pill" style="background: var(--quotes)">{ui.hero.quoteStatus}</span>
         </header>
         <div class="panel-body">
-          <p class="row"><span>Installation, 3 days</span><span class="num">[amount]</span></p>
-          <p class="row"><span>Materials</span><span class="num">[amount]</span></p>
-          <p class="row muted"><span>VAT · 6% renovation</span><span class="num">auto</span></p>
-          <p class="row total"><span>Total incl.</span><span class="big">[total]</span></p>
+          {
+            ui.hero.quoteLines.map((label, i) => (
+              <p class="row"><span>{label}</span><span class="num">€ {heroQuote.lines[i]}</span></p>
+            ))
+          }
+          <p class="row muted"><span>{ui.hero.quoteVat}</span><span class="num">{ui.hero.quoteVatValue}</span></p>
+          <p class="row total"><span>{ui.hero.quoteTotal}</span><span class="big">€ {heroQuote.total}</span></p>
         </div>
       </article>
 
@@ -72,9 +89,9 @@ const [before, after] = lineThree.split(profile.highlight)
         </div>
         <header class="panel-head">
           <span class="head-live">
-            <span class="dot-cycle"></span><span class="mono">The system</span>
+            <span class="dot-cycle"></span><span class="mono">{ui.hero.systemLabel}</span>
           </span>
-          <span class="mono live">live<span class="caret">_</span></span>
+          <span class="mono live">{ui.hero.systemLive}<span class="caret">_</span></span>
         </header>
         <ul class="stages">
           {
@@ -88,19 +105,16 @@ const [before, after] = lineThree.split(profile.highlight)
             ))
           }
         </ul>
-        <footer class="panel-foot mono">every role its own interface · RLS as the floor</footer>
+        <footer class="panel-foot mono">{ui.hero.systemFoot}</footer>
       </article>
 
       <article class="panel panel-point">
         <header class="point-head">
           <span class="dot-tick"></span>
-          <span class="mono" style="color: var(--site)">Site point · resolved</span>
+          <span class="mono" style="color: var(--site)">{ui.hero.pointLabel}</span>
         </header>
-        <p class="point-body">
-          Photo, annotation and owner hang off the point. The customer sees exactly what they
-          are allowed to see — nothing more.
-        </p>
-        <p class="mono point-foot">raised [date] · closed [date]</p>
+        <p class="point-body">{ui.hero.pointBody}</p>
+        <p class="mono point-foot">{ui.hero.pointFoot}</p>
       </article>
     </div>
   </div>
@@ -149,7 +163,7 @@ const [before, after] = lineThree.split(profile.highlight)
   .chip-dot { width: 8px; height: 8px; flex: none; animation: cycle 10s linear infinite; }
 
   .hero-title {
-    font-size: clamp(2rem, 5.6vw, 5rem);
+    font-size: clamp(2rem, var(--title-vw, 5.6vw), var(--title-max, 5rem));
     font-weight: 900;
     letter-spacing: -0.045em;
     text-wrap: nowrap;

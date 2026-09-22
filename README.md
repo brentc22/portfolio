@@ -28,8 +28,8 @@ So the page is organised the way the systems are: **five layers, five colours.**
 
 Colour is never decoration here. A case study, a stack chip, a rule in the approach section
 and a bar in the hero all take their colour from the layer they belong to, so the palette
-carries meaning instead of mood. Add a sixth layer to `src/data/site.js` and the whole page
-picks it up.
+carries meaning instead of mood. Add a sixth layer to `src/data/structure.js`, give it a name
+in each of the three language files, and the whole page picks it up.
 
 ## Design rules
 
@@ -61,20 +61,56 @@ Node 18 or newer. Astro with no integrations — the only client-side JavaScript
 
 ```
 src/
-  data/site.js          all copy, the five layers, the case studies, the principles
-  layouts/Layout.astro  head, fonts, skip link, reveal observer
+  data/structure.js     layer keys, links, tags — everything language-independent
+  i18n/
+    en.js nl.js fr.js   the words, one file per language
+    index.js            getSite(lang), localePath(), the language list
+  layouts/Layout.astro  head, hreflang, fonts, skip link, reveal observer
   components/
     Header.astro        masthead + nav
+    LangSwitcher.astro  EN / NL / FR, linking to the same page
     Hero.astro          headline, the spectrum rule, the three floating panels
-    Layers.astro        what a platform like this covers
     Work.astro          the case grid
     CasePreview.astro   the per-case abstract, drawn in blocks — never a screenshot
     Approach.astro      four rules, one per layer
+    CaseStudy.astro     the long-form case, in the language the route asked for
+    SectionHead.astro   one heading treatment for every section
     Contact.astro       closing line, links, footer
+  pages/
+    index.astro                        en
+    [lang]/index.astro                 nl, fr
+    work/operations-platform.astro     en
+    [lang]/work/operations-platform.astro
+    404.astro                          one file, swaps language in the browser
 ```
 
-Editing the page means editing `src/data/site.js`. The components take colour, copy and order
-from it; nothing is hard-coded twice.
+Editing the page means editing `src/data/structure.js` and the three files in `src/i18n/`. The
+components take colour, copy and order from them; nothing is hard-coded twice.
+
+## Three languages
+
+The site is served in English, Dutch and French — the working languages of a Belgian client.
+English stays at the root, so every link already in the wild keeps working; the other two are
+prefixed:
+
+```
+/                            /nl/                            /fr/
+/work/operations-platform/   /nl/work/operations-platform/   /fr/work/...
+```
+
+The split that matters is in the data. `src/data/structure.js` holds everything that is the
+same in every language — layer keys, colours, URLs, tags, which preview a card draws — and
+`src/i18n/{en,nl,fr}.js` hold only words. `getSite(lang)` joins the two and hands a component
+exactly the shape it had before the site was multilingual, so a translation can never quietly
+point at a dead link or a colour that does not exist.
+
+Each page carries `hreflang` for all three plus `x-default`, and the switcher in the masthead
+links to the same page in the other language rather than dumping the visitor on the homepage.
+There is no automatic redirect: a shared link opens in the language it was shared in.
+
+The headline is hand-set — `text-wrap: nowrap`, one set of line breaks per language — so the
+type scales to the longest line instead of overflowing. French runs about 25% longer than
+English and would otherwise slide under the artwork.
 
 ## Case previews
 

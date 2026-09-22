@@ -1,0 +1,339 @@
+---
+/** The long-form case, in whichever language the route asked for.
+ *  Used by /work/operations-platform/ and /<lang>/work/operations-platform/. */
+import SectionHead from './SectionHead.astro'
+import { getSite, localePath, defaultLang } from '../i18n'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
+const { case: study, layers, ui } = t
+
+const next = t.projects.find((p) => p.id === 'catchbox')
+---
+
+<article class="case">
+  <!-- ——— head ——— -->
+  <section class="case-hero">
+    <div class="shell">
+      <a class="back" href={`${localePath('/', lang)}#work`}>
+        <span aria-hidden="true">←</span> {ui.case.back}
+      </a>
+
+      <p class="mono eyebrow rise">{study.eyebrow}</p>
+      <h1 class="rise" style="animation-delay: 0.08s">{study.title}</h1>
+
+      <div class="spectrum rule rise" style="animation-delay: 0.16s">
+        {
+          layers.map((layer, i) => (
+            <span style={`background: var(--${layer.key}); animation-delay: ${0.4 + i * 0.09}s`} />
+          ))
+        }
+      </div>
+
+      <p class="standfirst rise" style="animation-delay: 0.24s">{study.standfirst}</p>
+
+      <dl class="facts rise" style="animation-delay: 0.32s">
+        {
+          study.facts.map((fact) => (
+            <div>
+              <dt class="mono">{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- ——— the problem ——— -->
+  <section class="band">
+    <div class="shell">
+      <SectionHead eyebrow={ui.case.context.eyebrow} title={ui.case.context.title} colour="leads" />
+      <div class="prose reveal">
+        {study.problem.map((para) => <p>{para}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ——— the shape ——— -->
+  <section class="band">
+    <div class="shell">
+      <SectionHead
+        eyebrow={ui.case.scope.eyebrow}
+        title={ui.case.scope.title}
+        aside={ui.case.scope.aside}
+        colour="quotes"
+      />
+
+      <ol class="layers">
+        {
+          layers.map((layer, i) => (
+            <li class="reveal" style={`--c: var(--${layer.key}); --i: ${i % 3}`}>
+              <span class="layer-tick" aria-hidden="true" />
+              <h3>{layer.name}</h3>
+              <ul class="modules">
+                {layer.modules.map((module) => <li>{module}</li>)}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="aside-note reveal">{study.layersNote}</p>
+    </div>
+  </section>
+
+  <!-- ——— decisions ——— -->
+  <section class="band">
+    <div class="shell">
+      <SectionHead
+        eyebrow={ui.case.engineering.eyebrow}
+        title={ui.case.engineering.title}
+        aside={ui.case.engineering.aside}
+        colour="invoices"
+      />
+
+      <div class="decisions">
+        {
+          study.decisions.map((d, i) => (
+            <article class="decision reveal" style={`--c: var(--${d.layer}); --i: ${i % 2}`}>
+              <span class="d-index mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{d.title}</h3>
+              <p class="d-body">{d.body}</p>
+              <div class="why">
+                <p class="mono">{ui.case.whyNot}</p>
+                <p>{d.why}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ——— process ——— -->
+  <section class="band">
+    <div class="shell">
+      <SectionHead eyebrow={ui.case.process.eyebrow} title={ui.case.process.title} colour="site" />
+
+      <ol class="steps">
+        {
+          study.process.map((step, i) => (
+            <li class="reveal" style={`--i: ${i}`}>
+              <span class="step-num mono">{step.step}</span>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ——— nda ——— -->
+  <section class="band">
+    <div class="shell">
+      <aside class="nda reveal">
+        <p class="mono">{ui.case.ndaLabel}</p>
+        <p class="nda-body">{study.nda}</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ——— next ——— -->
+  <section class="band next-band">
+    <div class="shell">
+      <a class="next" href={next.href} target="_blank" rel="noopener noreferrer">
+        <span class="mono next-label">{ui.case.next} · {next.number} {ui.case.of} 04</span>
+        <span class="next-name">{next.name}</span>
+        <span class="next-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</article>
+
+<style>
+  .case-hero { position: relative; padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem); }
+
+  .case-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--rule) 0 1px,
+      transparent 1px calc(100% / 8)
+    );
+    pointer-events: none;
+  }
+
+  .case-hero > .shell { position: relative; }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2.4rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .back:hover { color: var(--ink); }
+
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--quotes); }
+
+  h1 {
+    margin-top: 1rem;
+    max-width: 18ch;
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .rule { height: 12px; max-width: 34rem; margin-top: 2rem; }
+  .rule span { flex: 1; transform-origin: left; animation: grow 0.55s var(--ease) both; }
+
+  .standfirst {
+    margin-top: 2rem;
+    max-width: 58ch;
+    font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+    line-height: 1.62;
+    color: var(--ink-2);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 2.6rem;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .facts > div { background: var(--bg); padding: 1rem 1.1rem 1.15rem; }
+  .facts dt { font-size: 0.62rem; letter-spacing: 0.18em; color: var(--ink-5); }
+  .facts dd { margin: 0.5rem 0 0; font-size: 0.92rem; line-height: 1.45; color: var(--ink-2); }
+
+  .band { padding-block: clamp(2.8rem, 5.5vw, 4.5rem) 0; }
+
+  .prose { max-width: 66ch; }
+  .prose p { font-size: 1.05rem; line-height: 1.72; color: var(--ink-3); }
+  .prose p + p { margin-top: 1.15rem; }
+
+  /* the five layers, moved here from the home page */
+  .layers {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .layers > li { background: var(--bg); padding: 1.4rem 1.3rem 1.7rem; }
+  .layer-tick { display: block; width: 34px; height: 5px; background: var(--c); }
+  .layers h3 { margin-top: 0.85rem; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
+  .modules {
+    margin-top: 0.6rem;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-size: 0.72rem;
+    line-height: 2;
+    color: var(--ink-4);
+  }
+
+  .aside-note {
+    max-width: 62ch;
+    margin-top: 1.6rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--ink-4);
+  }
+
+  .decisions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+
+  .decision {
+    position: relative;
+    padding: 1.7rem 1.7rem 1.8rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 5px solid var(--c);
+    transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+  }
+  .decision:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--c); }
+
+  .d-index { font-size: 0.72rem; letter-spacing: 0.16em; color: var(--c); }
+
+  .decision h3 {
+    margin-top: 0.7rem;
+    font-size: clamp(1.18rem, 1.9vw, 1.42rem);
+    font-weight: 800;
+    letter-spacing: -0.028em;
+    line-height: 1.24;
+    text-wrap: balance;
+  }
+
+  .d-body { margin-top: 0.8rem; font-size: 0.97rem; line-height: 1.62; color: var(--ink-3); }
+
+  .why {
+    margin-top: 1.2rem;
+    padding: 0.95rem 1.05rem 1.05rem;
+    background: var(--surface-sunk);
+    border-left: 3px solid var(--c);
+  }
+  .why .mono { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--c); }
+  .why p:last-child { margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55; color: var(--ink-4); }
+
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .steps > li { background: var(--bg); padding: 1.5rem 1.4rem 1.8rem; }
+  .step-num { font-size: 1.5rem; font-weight: 500; letter-spacing: 0; color: var(--site); }
+  .steps h3 { margin-top: 0.7rem; font-size: 1.02rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+  .steps p { margin-top: 0.6rem; font-size: 0.9rem; line-height: 1.55; color: var(--ink-4); }
+
+  .nda {
+    max-width: 62ch;
+    padding: 1.4rem 1.6rem 1.6rem;
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--portal);
+    background: var(--surface);
+  }
+  .nda .mono { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--portal); }
+  .nda-body { margin-top: 0.7rem; font-size: 0.97rem; line-height: 1.62; color: var(--ink-3); }
+
+  .next-band { padding-top: clamp(2.5rem, 5vw, 4rem); }
+
+  .next {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.7rem 1.6rem;
+    border: 1px solid var(--line);
+    border-top: 5px solid var(--site);
+    background: var(--surface);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+  }
+  .next:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--site); }
+  .next-label { font-size: 0.66rem; color: var(--ink-5); }
+  .next-name { font-size: clamp(1.3rem, 2.4vw, 1.8rem); font-weight: 800; letter-spacing: -0.032em; }
+  .next-arrow { margin-left: auto; font-size: 1.5rem; color: var(--site); }
+
+  @media (max-width: 1000px) {
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layers > li:last-child { grid-column: 1 / -1; }
+    .decisions { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 620px) {
+    .facts,
+    .layers,
+    .steps { grid-template-columns: minmax(0, 1fr); }
+    .layers > li:last-child { grid-column: auto; }
+    .next { flex-wrap: wrap; gap: 0.6rem 1rem; }
+    .next-name { width: 100%; order: 3; }
+  }
+</style>

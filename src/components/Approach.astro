@@ -1,21 +1,24 @@
 ---
-import { principles } from '../data/site.js'
+import { getSite, defaultLang } from '../i18n'
 import SectionHead from './SectionHead.astro'
+
+const { lang = defaultLang } = Astro.props
+const t = getSite(lang)
 ---
 
 <section class="approach" id="approach">
   <div class="shell">
     <SectionHead
-      eyebrow="Method"
-      title="How I work"
-      aside="four rules, paid for in incidents"
+      eyebrow={t.ui.approach.eyebrow}
+      title={t.ui.approach.title}
+      aside={t.ui.approach.aside}
       colour="invoices"
       id="approach-title"
     />
 
     <ol class="rules">
       {
-        principles.map((rule, i) => (
+        t.principles.map((rule, i) => (
           <li class="reveal" style={`--c: var(--${rule.layer}); --i: ${i % 2}`}>
             <span class="index mono" aria-hidden="true">{rule.number}</span>
 
@@ -25,11 +28,11 @@ import SectionHead from './SectionHead.astro'
 
               <dl class="detail">
                 <div class="detail-row">
-                  <dt class="mono">In practice</dt>
+                  <dt class="mono">{t.ui.approach.practice}</dt>
                   <dd>{rule.practice}</dd>
                 </div>
                 <div class="detail-row cost">
-                  <dt class="mono">Without it</dt>
+                  <dt class="mono">{t.ui.approach.cost}</dt>
                   <dd>{rule.cost}</dd>
                 </div>
               </dl>

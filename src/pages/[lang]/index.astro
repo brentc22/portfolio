@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Hero from '../../components/Hero.astro'
+import Work from '../../components/Work.astro'
+import Approach from '../../components/Approach.astro'
+import Contact from '../../components/Contact.astro'
+import { prefixed } from '../../i18n'
+
+/** English lives at the root, so only the prefixed languages get a page here. */
+export function getStaticPaths() {
+  return prefixed.map((lang) => ({ params: { lang } }))
+}
+
+const { lang } = Astro.params
+---
+
+<Layout lang={lang} page="home">
+  <Header lang={lang} />
+  <main id="main">
+    <Hero lang={lang} />
+    <Work lang={lang} />
+    <Approach lang={lang} />
+    <Contact lang={lang} />
+  </main>
+</Layout>
